@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pilih Kecamatan</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <label for="kecamatan">Pilih Kecamatan:</label>
+        <select name="kecamatan" id="kecamatan">
+            <option value="">-- Pilih Kecamatan --</option>
+            {% for kecamatan in kecamatan_options %}
+                <option value="{{ kecamatan }}">{{ kecamatan }}</option>
+            {% endfor %}
+        </select><br>
+
+        <button type="submit">Go Entry</button>
+    </form>
+</body>
+</html>

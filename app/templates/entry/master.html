@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entry Page</title>
+</head>
+<body>
+    <h1>Master Data</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>NAMA</th>
+                <th>PENDATA</th>
+                <th>NIK</th>
+                <th>TELP</th>
+                <th>TPS</th>
+                <th>KEL</th>
+                <th>KEC</th>
+                <th>KAB</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in page_obj %}
+            <tr>
+                <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
+                <td>{{ data.NAMA }}</td>
+                <td>{{ data.PENDATA }}</td>
+                <td>{{ data.NIK }}</td>
+                <td>{{ data.TELP }}</td>
+                <td>{{ data.TPS }}</td>
+                <td>{{ data.KEL }}</td>
+                <td>{{ data.KEC }}</td>
+                <td>{{ data.KAB }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</body>
+</html>

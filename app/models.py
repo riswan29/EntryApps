@@ -23,4 +23,16 @@ class Kelurahan(models.Model):
     nama = models.CharField(max_length=100)
     kecamatan = models.ForeignKey(Kecamatan, on_delete=models.CASCADE)
 
+
+
+class EntryData(models.Model):
+    NAMA = models.CharField(max_length=100)
+    PENDATA = models.CharField(max_length=100)
+    NIK = models.CharField(max_length=20)
+    TELP = models.CharField(max_length=20)
+    TPS = models.CharField(max_length=20)
+    KEL = models.CharField(max_length=100)
+    KEC = models.CharField(max_length=100)
+    KAB = models.CharField(max_length=100)
+
     

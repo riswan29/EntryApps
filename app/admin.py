@@ -23,8 +23,14 @@ class userPROF(admin.ModelAdmin):
 class KELURAHAN_g(admin.ModelAdmin):
     list_display = ('nama', 'kecamatan')
     list_filter = (KecamatanFilter,)
- 
+
+class entryDATA(admin.ModelAdmin):
+    list_display =  ('NAMA', 'PENDATA', 'KEL', 'KEC')
+    list_per_page = 100
+    list_filter = ('KEC', 'KEL')
+
 
 admin.site.register(UserProfile, userPROF)
 admin.site.register(Kecamatan)
 admin.site.register(Kelurahan, KELURAHAN_g)
+admin.site.register(EntryData,entryDATA)
