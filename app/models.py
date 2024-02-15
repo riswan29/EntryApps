@@ -11,3 +11,16 @@ class UserProfile(models.Model):
         ('dapal', 'Dapal'),
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+
+class Kecamatan(models.Model):
+    nama = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nama
+
+class Kelurahan(models.Model):
+    nama = models.CharField(max_length=100)
+    kecamatan = models.ForeignKey(Kecamatan, on_delete=models.CASCADE)
+
+    
