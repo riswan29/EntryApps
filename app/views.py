@@ -101,8 +101,16 @@ def entry_data(request):
     kecamatan_options = EntryData.objects.values_list('KEC', flat=True).distinct()
 
     if request.method == 'POST':
-        kecamatan = request.POST.get('kecamatan')
-        entries = EntryData.objects.filter(KEC=kecamatan)
-        return render(request, 'entry/entry_data_result.html', {'entries': entries, 'kecamatan': kecamatan})
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            search_query = request.POST.get('search_query')
+            results = EntryData.objects.filter(NAMA__icontains=search_query)
+            data = [{'id': entry.id, 'nama': entry.NAMA} for entry in results]
+            return JsonResponse(data, safe=False)
+        else:
+            kecamatan = request.POST.get('kecamatan')
+            entries = EntryData.objects.filter(KEC=kecamatan)
+            return render(request, 'entry/entry_data_result.html', {'entries': entries, 'kecamatan': kecamatan})
 
     return render(request, 'entry/entry_data.html', {'kecamatan_options': kecamatan_options})
+
+

@@ -1,0 +1,57 @@
+<!-- search_and_add.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search and Add</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Search and Add</h1>
+    <input type="text" id="searchInput" placeholder="Search for name...">
+    <ul id="searchResults"></ul>
+
+    <button id="addButton" style="display:none;">Tambah</button>
+
+    <script>
+    $(document).ready(function() {
+        $('#searchInput').on('input', function() {
+            var searchQuery = $(this).val();
+            $.ajax({
+                type: 'POST',
+                url: '/search_and_add/',
+                data: {
+                    'search_query': searchQuery,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    $('#searchResults').empty();
+                    if (response.length > 0) {
+                        $.each(response, function(index, entry) {
+                            $('#searchResults').append('<li data-entry-id="' + entry.id + '">' + entry.nama + '</li>');
+                        });
+                        $('#addButton').show();
+                    } else {
+                        $('#searchResults').append('<li>No results found.</li>');
+                        $('#addButton').hide();
+                    }
+                }
+            });
+        });
+
+        $('#addButton').on('click', function() {
+            var selectedId = $('#searchResults li.selected').attr('data-entry-id');
+            if (selectedId) {
+                // Handle adding selected data to AddedData table
+                // Send selectedId to server for further processing
+                alert('Data with ID ' + selectedId + ' will be added.');
+            }
+        });
+
+        $('#searchResults').on('click', 'li', function() {
+            $(this).siblings().removeClass('selected');
+            $(this).addClass('selected');
+        });
+    });
+    </script>
+</body>
+</html>

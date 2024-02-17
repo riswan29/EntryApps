@@ -2,15 +2,11 @@
 <html>
 <head>
     <title>Data untuk Kecamatan {{ kecamatan }}</title>
+
 </head>
 <body>
     <h1>Data untuk Kecamatan {{ kecamatan }}</h1>
     <table>
-        <center>
-            <tr>
-                <td colspan="6">Total: {{ entries|length }}</td>
-            </tr>
-        </center>
         <thead>
             <tr>
                 <th>Nama</th>
@@ -31,6 +27,13 @@
             </tr>
             {% endfor %}
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">Total: {{ entries|length }}</td>
+            </tr>
+        </tfoot>
     </table>
+
+
 </body>
 </html>

@@ -35,4 +35,12 @@ class EntryData(models.Model):
     KEC = models.CharField(max_length=100)
     KAB = models.CharField(max_length=100)
 
-    
+
+class AddedData(models.Model):
+    nama = models.CharField(max_length=100)
+    pendata = models.CharField(max_length=100)
+    nik = models.CharField(max_length=20)
+    telp = models.CharField(max_length=20)
+    tps = models.CharField(max_length=20)
+    kecamatan = models.CharField(max_length=100)
+    kelurahan = models.CharField(max_length=100)
