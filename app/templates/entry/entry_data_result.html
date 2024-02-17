@@ -5,9 +5,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
-            $('#search_form').submit(function(event){
-                event.preventDefault();
-                var searchQuery = $('#search_input').val();
+            $('#search_input').on('input', function(){
+                var searchQuery = $(this).val();
                 $.ajax({
                     type: 'POST',
                     url: '{% url 'entry_data' %}',
@@ -18,46 +17,49 @@
                     },
                     dataType: 'json',
                     success: function(data){
-                        var html = '<table>';
-                        html += '<thead><tr><th>Nama</th><th>Pendata</th><th>NIK</th><th>Telp</th><th>KEC</th><th>TPS</th></tr></thead><tbody>';
+                        var html = '';
                         $.each(data, function(index, entry){
                             html += '<tr>';
                             html += '<td>' + entry.nama + '</td>';
-                            html += '<td>' + (entry.pendata || 'N/A') + '</td>';
-                            html += '<td>' + (entry.nik || 'N/A') + '</td>';
-                            html += '<td>' + (entry.telp || 'N/A') + '</td>';
-                            html += '<td>' + (entry.kec || 'N/A') + '</td>';
-                            html += '<td>' + (entry.tps || 'N/A') + '</td>';
+                            html += '<td>' + entry.pendata + '</td>';
+                            html += '<td>' + entry.nik + '</td>';
+                            html += '<td>' + entry.telp + '</td>';
+                            html += '<td>' + entry.kec + '</td>';
+                            html += '<td>' + entry.tps + '</td>';
+                            html += '<td><button>Add</button></td>';
                             html += '</tr>';
                         });
-                        html += '</tbody></table>';
-                        $('#entry_data_table').html(html);
+                        $('#entry_data_table tbody').html(html);
                     }
                 });
             });
         });
     </script>
 </head>
-</head>
 <body>
-    <h1>Data untuk Kecamatan {{ kecamatan }}</h1>
 
     <!-- Formulir Pencarian -->
-    <form id="search_form">
-        <input type="text" id="search_input" placeholder="Cari berdasarkan nama">
-        <button type="submit">Cari</button>
-    </form>
+    <center>
+        <h1>Data untuk Kecamatan {{ kecamatan }}</h1>
+        <form id="search_form">
+            <input type="text" id="search_input" placeholder="Cari berdasarkan nama">
+            {% comment %} <button type="submit">Cari</button> {% endcomment %}
+        </form>
+        <p>Total Data: {{ entries|length }}</p>
 
     <!-- Tabel Hasil Pencarian -->
     <div id="entry_data_table">
-        <table>
+        <table border=1 >
             <thead>
                 <tr>
                     <th>Nama</th>
                     <th>Pendata</th>
                     <th>NIK</th>
+                    <th>Kecamatan</th>
                     <th>Telp</th>
                     <th>TPS</th>
+                    <th>Act</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -69,6 +71,7 @@
                     <td>{{ entry.KEC }}</td>
                     <td>{{ entry.TELP }}</td>
                     <td>{{ entry.TPS }}</td>
+                    <td><button>Add</button></td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -76,12 +79,8 @@
                 </tr>
                 {% endfor %}
             </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="5">Total: {{ entries|length }}</td>
-                </tr>
-            </tfoot>
         </table>
     </div>
+</center>
 </body>
 </html>

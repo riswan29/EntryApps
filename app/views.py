@@ -98,6 +98,7 @@ def import_data_csv(request):
 
 
 def entry_data(request):
+    # Mendapatkan opsi kecamatan yang unik dari model EntryData
     kecamatan_options = EntryData.objects.values_list('KEC', flat=True).distinct()
 
     if request.method == 'POST':
