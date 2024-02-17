@@ -2,38 +2,86 @@
 <html>
 <head>
     <title>Data untuk Kecamatan {{ kecamatan }}</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#search_form').submit(function(event){
+                event.preventDefault();
+                var searchQuery = $('#search_input').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'entry_data' %}',
+                    data: {
+                        'search_query': searchQuery,
+                        'kecamatan': '{{ kecamatan }}',
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        var html = '<table>';
+                        html += '<thead><tr><th>Nama</th><th>Pendata</th><th>NIK</th><th>Telp</th><th>KEC</th><th>TPS</th></tr></thead><tbody>';
+                        $.each(data, function(index, entry){
+                            html += '<tr>';
+                            html += '<td>' + entry.nama + '</td>';
+                            html += '<td>' + (entry.pendata || 'N/A') + '</td>';
+                            html += '<td>' + (entry.nik || 'N/A') + '</td>';
+                            html += '<td>' + (entry.telp || 'N/A') + '</td>';
+                            html += '<td>' + (entry.kec || 'N/A') + '</td>';
+                            html += '<td>' + (entry.tps || 'N/A') + '</td>';
+                            html += '</tr>';
+                        });
+                        html += '</tbody></table>';
+                        $('#entry_data_table').html(html);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
 </head>
 <body>
     <h1>Data untuk Kecamatan {{ kecamatan }}</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Nama</th>
-                <th>Pendata</th>
-                <th>NIK</th>
-                <th>Telp</th>
-                <th>TPS</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in entries %}
-            <tr>
-                <td>{{ entry.NAMA }}</td>
-                <td>{{ entry.PENDATA }}</td>
-                <td>{{ entry.NIK }}</td>
-                <td>{{ entry.TELP }}</td>
-                <td>{{ entry.TPS }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="5">Total: {{ entries|length }}</td>
-            </tr>
-        </tfoot>
-    </table>
 
+    <!-- Formulir Pencarian -->
+    <form id="search_form">
+        <input type="text" id="search_input" placeholder="Cari berdasarkan nama">
+        <button type="submit">Cari</button>
+    </form>
 
+    <!-- Tabel Hasil Pencarian -->
+    <div id="entry_data_table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Pendata</th>
+                    <th>NIK</th>
+                    <th>Telp</th>
+                    <th>TPS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.NAMA }}</td>
+                    <td>{{ entry.PENDATA }}</td>
+                    <td>{{ entry.NIK }}</td>
+                    <td>{{ entry.KEC }}</td>
+                    <td>{{ entry.TELP }}</td>
+                    <td>{{ entry.TPS }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">Tidak ada hasil yang ditemukan.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">Total: {{ entries|length }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </body>
 </html>

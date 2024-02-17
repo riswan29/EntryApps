@@ -96,21 +96,22 @@ def import_data_csv(request):
         return render(request, 'import_success.html')
     return render(request, 'import_form.html')
 
+
 def entry_data(request):
-    # Mendapatkan opsi kecamatan yang unik dari model EntryData
     kecamatan_options = EntryData.objects.values_list('KEC', flat=True).distinct()
 
     if request.method == 'POST':
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             search_query = request.POST.get('search_query')
             results = EntryData.objects.filter(NAMA__icontains=search_query)
-            data = [{'id': entry.id, 'nama': entry.NAMA} for entry in results]
+            data = [{'nama': entry.NAMA, 'pendata': entry.PENDATA, 'nik': entry.NIK, 'telp': entry.TELP, 'kec': entry.KEC, 'tps': entry.TPS} for entry in results]
             return JsonResponse(data, safe=False)
         else:
             kecamatan = request.POST.get('kecamatan')
+            search_query = request.POST.get('search_query')
             entries = EntryData.objects.filter(KEC=kecamatan)
+            if search_query:
+                entries = entries.filter(NAMA__icontains=search_query)
             return render(request, 'entry/entry_data_result.html', {'entries': entries, 'kecamatan': kecamatan})
 
     return render(request, 'entry/entry_data.html', {'kecamatan_options': kecamatan_options})
-
-
