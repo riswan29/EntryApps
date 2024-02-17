@@ -103,7 +103,8 @@ def entry_data(request):
     if request.method == 'POST':
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             search_query = request.POST.get('search_query')
-            results = EntryData.objects.filter(NAMA__icontains=search_query)
+            kecamatan = request.POST.get('kecamatan')
+            results = EntryData.objects.filter(KEC=kecamatan, NAMA__icontains=search_query)
             data = [{'nama': entry.NAMA, 'pendata': entry.PENDATA, 'nik': entry.NIK, 'telp': entry.TELP, 'kec': entry.KEC, 'tps': entry.TPS} for entry in results]
             return JsonResponse(data, safe=False)
         else:
